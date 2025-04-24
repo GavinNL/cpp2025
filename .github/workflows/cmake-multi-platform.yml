@@ -97,5 +97,11 @@ jobs:
           cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/build/conan_toolchain.cmake  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
       - name: Build
-        run: cmake --build build
+        run: cmake --build build --config ${{ matrix.build_type }} --parallel 
+
+      - name: Test
+        run: |
+          cd build
+          ctest -C ${{ matrix.build_type }} --output-on-failure
+          cd ${{ github.workspace }}
 
