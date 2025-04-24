@@ -88,12 +88,17 @@ jobs:
 
       - name: Configure Conan
         run: |
-          conan install ${{ github.workspace }}/conanfile.py --build missing  -s:h "&:build_type=${{ matrix.build_type }}" -s "compiler.cppstd=20" -of=build -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
+          conan install ${{ github.workspace }}/conanfile.py --build missing  \
+                -s:h "&:build_type=${{ matrix.build_type }}" \
+                -s "compiler.cppstd=20" \
+                -of=build \
+                -c tools.system.package_manager:mode=install \
+                -c tools.system.package_manager:sudo=True
 
 
       - name: Configure CMake
         run: |
-          cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=build/conan_toolchain.cmake  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/build/conan_toolchain.cmake  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
       - name: Build
         run: cmake --build build
