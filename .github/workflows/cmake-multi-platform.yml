@@ -77,7 +77,9 @@ jobs:
         with:
           python-version: '3.x'  # Always gets latest stable
 
+# ╔══════════════════════════════════════════════╗
       - name: Install Conan
+# ╚══════════════════════════════════════════════╝
         run: |
           echo $PWD
           mkdir -p ../build
@@ -87,21 +89,34 @@ jobs:
           pip install conan
           conan profile detect --force
 
+
+# ╔══════════════════════════════════════════════╗
       - name: Configure Conan
+# ╚══════════════════════════════════════════════╝
         run: |
-          conan install ${{ github.workspace }}/conanfile.py --build missing  -s:h "&:build_type=${{ matrix.build_type }}" -s "compiler.cppstd=20"  -of=build  -c tools.system.package_manager:mode=install  -c tools.system.package_manager:sudo=True
+          conan install ${{ github.workspace }}/conanfile.py --build missing  -s:h "&:build_type=${{ matrix.build_type }}" -s "compiler.cppstd=20"  -of=${{ github.workspace }}/../build  -c tools.system.package_manager:mode=install  -c tools.system.package_manager:sudo=True
 
 
+
+# ╔══════════════════════════════════════════════╗
       - name: Configure CMake
+# ╚══════════════════════════════════════════════╝
         run: |
-          cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/build/conan_toolchain.cmake  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
+          cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=${{ github.workspace }}/../build/conan_toolchain.cmake  -DCMAKE_POLICY_DEFAULT_CMP0091=NEW -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
 
+
+# ╔══════════════════════════════════════════════╗
       - name: Build
-        run: cmake --build build --config ${{ matrix.build_type }} --parallel 
+# ╚══════════════════════════════════════════════╝
+        run: cmake --build ${{ github.workspace }}/../build --config ${{ matrix.build_type }} --parallel 
 
+
+
+# ╔══════════════════════════════════════════════╗
       - name: Test
+# ╚══════════════════════════════════════════════╝
         run: |
-          cd build
+          cd ${{ github.workspace }}/../build
           ctest -C ${{ matrix.build_type }} --output-on-failure
           cd ${{ github.workspace }}
 
