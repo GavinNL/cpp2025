@@ -77,10 +77,17 @@ jobs:
         with:
           python-version: '3.x'  # Always gets latest stable
 
-      - name: Configure Conan
+      - name: Install Conan
         run: |
           echo $PWD
-          tree
+          tree ..
+          pip install --upgrade pip 
+          pip install setuptools wheel
+          pip install conan
+          conan profile detect --force
+
+      - name: Configure Conan
+        run: |
           conan install ${{ github.workspace }}/conanfile.py --build missing  -s:h "&:build_type=${{ matrix.build_type }}" -s "compiler.cppstd=20" -of=build -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
 
 
