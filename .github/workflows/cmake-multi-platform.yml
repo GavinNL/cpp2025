@@ -122,11 +122,11 @@ jobs:
 
 
 # ╔══════════════════════════════════════════════╗
-      - name: Coverage
+      - name: Run Coverage Report
 # ╚══════════════════════════════════════════════╝
-    - name: Run Coverage Report
-      if: matrix.os == 'ubuntu-latest' && matrix.c_compiler == 'gcc' && matrix.build_type == 'Debug'
-      run: |
-        sudo apt install -y gcovr
-        cmake --build ${{ github.workspace }}/../build --target coverage --config ${{ matrix.build_type }} 
+
+        if: matrix.os == 'ubuntu-latest' && matrix.c_compiler == 'gcc' && matrix.build_type == 'Debug'
+        run: |
+          sudo apt install -y gcovr
+          cmake --build ${{ github.workspace }}/../build --target coverage --config ${{ matrix.build_type }} 
 
