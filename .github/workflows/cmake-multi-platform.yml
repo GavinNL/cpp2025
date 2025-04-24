@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
         build_type: [Debug, Release]
-        compiler: [gcc-11, gcc-12, gcc-13, clang-18, clang-19, clang-20, msvc]
+        compiler: [gcc-11, gcc-12, gcc-13, clang-18, clang-19, msvc]
         include:
           - os: ubuntu-latest
             compiler: gcc-11
@@ -34,10 +34,6 @@ jobs:
             compiler: clang-19
             cc: clang-19
             cxx: clang++-19
-          - os: ubuntu-latest
-            compiler: clang-20
-            cc: clang-20
-            cxx: clang++-20
           - os: windows-latest
             compiler: msvc
             cc: cl
@@ -54,8 +50,6 @@ jobs:
             compiler: clang-18
           - os: windows-latest
             compiler: clang-19
-          - os: windows-latest
-            compiler: clang-20
 
     env:
       CC: ${{ matrix.cc }}
