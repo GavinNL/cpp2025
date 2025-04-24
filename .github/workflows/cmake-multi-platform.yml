@@ -120,3 +120,13 @@ jobs:
           ctest -C ${{ matrix.build_type }} --output-on-failure
           cd ${{ github.workspace }}
 
+
+# ╔══════════════════════════════════════════════╗
+      - name: Coverage
+# ╚══════════════════════════════════════════════╝
+    - name: Run Coverage Report
+      if: matrix.os == 'ubuntu-latest' && matrix.c_compiler == 'gcc' && matrix.build_type == 'Debug'
+      run: |
+        sudo apt install -y gcovr
+        cmake --build ${{ github.workspace }}/../build --target coverage --config ${{ matrix.build_type }} 
+

@@ -41,7 +41,7 @@ foreach(file ${files})
                                 PUBLIC
                                     doctest::doctest
 #                                    ${PROJECT_NAME}::warnings
-#                                    ${PROJECT_NAME}::coverage
+                                    ${PROJECT_NAME}::coverage
 #                                    ${PROJECT_NAME}::${PROJECT_NAME}
                                 )
 
