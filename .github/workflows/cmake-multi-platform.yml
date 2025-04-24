@@ -63,13 +63,25 @@ jobs:
         if: runner.os == 'Linux'
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build ${{ matrix.cxx}} 
+          sudo apt-get install -y cmake ninja-build ${{ matrix.cxx}} tree
 
       - name: Set compiler environment variables (Linux only)
         if: runner.os == 'Linux'
         run: |
           echo "CC=${{ matrix.cc }}" >> $GITHUB_ENV
           echo "CXX=${{ matrix.cxx }}" >> $GITHUB_ENV
+
+      - name: Install latest Python 3 (Windows)
+        if: runner.os == 'Windows'
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'  # Always gets latest stable
+
+    - name: Configure Conan 
+      run: |
+        echo $PWD
+        tree
+        conan install ${{ github.workspace }}/conanfile.py --build missing  -s:h "&:build_type=${{ matrix.build_type }}" -s "compiler.cppstd=20" -of=build -c tools.system.package_manager:mode=install -c tools.system.package_manager:sudo=True
 
       - name: Configure CMake
         run: |
